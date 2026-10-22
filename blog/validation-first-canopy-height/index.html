@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Random k-fold flattered my model by 3%. A new region cost 45%. · Ruiyao Chen</title>
+<meta name="description" content="What a validation-first canopy-height model taught me about where ML error actually comes from in Earth observation, and why calibrated intervals are not the same as accurate ones.">
+<meta name="author" content="Ruiyao Chen">
+<link rel="canonical" href="https://ruiyao-chen.github.io/blog/validation-first-canopy-height/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Random k-fold flattered my model by 3%. A new region cost 45%. · Ruiyao Chen">
+<meta property="og:description" content="What a validation-first canopy-height model taught me about where ML error actually comes from in Earth observation, and why calibrated intervals are not the same as accurate ones.">
+<meta property="og:url" content="https://ruiyao-chen.github.io/blog/validation-first-canopy-height/"><meta property="og:image" content="https://ruiyao-chen.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d6b61">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Ruiyao Chen: writing" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header"><div class="wrap">
+<a class="brand" href="/"><span class="brand-mark">RC</span><span class="brand-name">Ruiyao Chen</span></a>
+<nav class="nav" aria-label="Main"><a href="/projects/">Projects</a><a href="/blog/" aria-current="page">Writing</a><a href="/resume/">Resume</a><a href="/#contact">Contact</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap"><div class="page-head">
+<div class="crumbs"><a href="/blog/">Writing</a> /</div>
+<h1>Random k-fold flattered my model by 3%. A new region cost 45%.</h1>
+<div class="meta-row"><span class="period"><time datetime="2026-10-22">Oct 22, 2026</time> · 2 min read</span><ul class="tags"><li>validation</li><li>spatial CV</li><li>conformal prediction</li><li>remote sensing</li></ul></div>
+</div>
+<article class="prose"><p>I built a small canopy-height model for fire-prone California: GEDI spaceborne
+LiDAR as the reference, Sentinel-2 and terrain as predictors, XGBoost as the
+model. The model was the easy part. I spent most of the effort on how to
+evaluate it, because a fuels map is only useful if you know how wrong it is
+and where. (<a href="/projects/canopy-height-validation/">Full project write-up</a>.)</p>
+<p>Here are the four things that surprised me.</p>
+<h2>1. Spatial CV barely mattered. Geography did.</h2>
+<p>Everyone warns that random k-fold leaks information between neighbouring
+samples. So I used spatial blocks sized by a variogram, plus a 1 km buffer.
+The result: random k-fold was optimistic by only <strong>2–3%</strong>.</p>
+<p>Then I trained on one ecoregion and tested on the other. RMSE rose by
+<strong>34–45%</strong>, with biases of 6–9 m. With only 32–40% of the variance explained,
+neighbouring shots shared little the model could exploit, so the spatial
+leak was small. The real risk wasn't leakage. It was deployment somewhere new.</p>
+<p><strong>Lesson:</strong> spatial CV is necessary but not sufficient. If the model will be
+used outside its training region, test it outside its training region.</p>
+<h2>2. One feature was quietly breaking transfer</h2>
+<p>The two regions barely overlap in elevation: 99.6% of coastal shots are below
+1,000 m and 92% of Sierra shots are above it. Inside a region, elevation
+helps a little. Across regions, it forces the trees to extrapolate, and they
+carry the source region's height level with them.</p>
+<p>Dropping elevation cut transfer RMSE by 20% in the Sierra, at a cost of about
+1% in-region. An in-region CV score would never have told me to remove it.</p>
+<h2>3. The simple models were just as good</h2>
+<p>Random forest beat XGBoost in every evaluation. Ridge regression beat XGBoost
+on the coast. Within a region all three were within 4% of each other. The
+flexible models only earned their keep under transfer, where ridge
+collapsed. If I'd only tuned XGBoost, I'd have reported a more complex model
+for no gain.</p>
+<h2>4. Calibration restores honesty, not accuracy</h2>
+<p>I wrapped quantile XGBoost in conformalized quantile regression. Within a
+region, the 90% intervals covered 90.2% of held-out shots, and a Mondrian
+(per-group) version fixed the imbalance between short and tall vegetation.</p>
+<p>In the other ecoregion, the same 90% interval covered <strong>56%</strong>. Recalibrating
+on a fifth of the new region's data brought coverage back to 90%, but only
+by widening the intervals up to 2.4×. Conformal methods guarantee coverage
+for data like the calibration set. They can't make a model accurate where it
+has never seen data. That needs local training data, and deciding where to
+collect it is a ground-truth design question.</p>
+<h2>What I'd do on any geospatial ML project</h2>
+<ul>
+<li>Report random, spatial, and out-of-region numbers side by side.</li>
+<li>Audit features for range mismatch between training and deployment areas.</li>
+<li>Keep a simple baseline in every table.</li>
+<li>Check interval coverage per group and per region, not just overall.</li>
+<li>Build a synthetic test bed with known truth first, so you know the
+  evaluation code is right before you trust what it says about real data.</li>
+</ul></article>
+<nav class="page-nav" aria-label="Post"><a href="/blog/"><span>Back</span>All writing</a>
+<a href="mailto:chenruiyao@gmail.com" style="text-align:right"><span>Questions?</span>Email me</a></nav>
+</div>
+</main>
+<footer class="site-footer"><div class="wrap">
+<span>© 2026 Ruiyao Chen</span>
+<span><a href="mailto:chenruiyao@gmail.com">chenruiyao@gmail.com</a> · <a href="/feed.xml">RSS</a></span>
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An operational NASA retrieval with per-pixel uncertainty · Ruiyao Chen</title>
+<meta name="description" content="I proposed, built, validated and shipped the precipitation ice-water-path product for NASA&#x27;s TROPICS small-satellite constellation: a probabilistic k-d tree retrieval that reports an uncertainty for every pixel.">
+<meta name="author" content="Ruiyao Chen">
+<link rel="canonical" href="https://ruiyao-chen.github.io/projects/tropics-ice-water-path/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="An operational NASA retrieval with per-pixel uncertainty · Ruiyao Chen">
+<meta property="og:description" content="I proposed, built, validated and shipped the precipitation ice-water-path product for NASA&#x27;s TROPICS small-satellite constellation: a probabilistic k-d tree retrieval that reports an uncertainty for every pixel.">
+<meta property="og:url" content="https://ruiyao-chen.github.io/projects/tropics-ice-water-path/"><meta property="og:image" content="https://ruiyao-chen.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d6b61">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Ruiyao Chen: writing" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header"><div class="wrap">
+<a class="brand" href="/"><span class="brand-mark">RC</span><span class="brand-name">Ruiyao Chen</span></a>
+<nav class="nav" aria-label="Main"><a href="/projects/" aria-current="page">Projects</a><a href="/blog/">Writing</a><a href="/resume/">Resume</a><a href="/#contact">Contact</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap"><div class="page-head">
+<div class="crumbs"><a href="/projects/">Projects</a> /</div>
+<h1>An operational NASA retrieval with per-pixel uncertainty</h1>
+<p class="lede">I proposed, built, validated and shipped the precipitation ice-water-path product for NASA&#x27;s TROPICS small-satellite constellation: a probabilistic k-d tree retrieval that reports an uncertainty for every pixel.</p>
+<p class="callout">Delivered to NASA operations; zonal r = 0.87 against independent GPM radar</p>
+<div class="meta-row"><span class="period">2023 – present · NASA TROPICS mission</span><ul class="tags"><li>k-d tree</li><li>probabilistic retrieval</li><li>uncertainty quantification</li><li>production code</li><li>radiative transfer</li><li>Python</li><li>Fortran</li></ul></div>
+<div class="actions" style="margin-top:20px"><a class="btn" href="https://earthdata.nasa.gov/data/catalog/ges-disc-tropics01ktpil2b-1.0" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>NASA dataset (GES DISC)</a></div>
+</div>
+<figure class="cover"><img src="mindulle.jpg" alt="Six-panel map of TROPICS retrievals over Typhoon Mindulle on 26 September 2021, including ice water path, rain rate and number of neighbors" width="1664" height="861"></figure>
+<article class="prose"><p>NASA's TROPICS mission flies a constellation of CubeSats that revisit tropical
+cyclones far more often than traditional satellites. Its new 205 GHz channel is
+sensitive to precipitation-sized ice, which is a key signal of storm
+structure and convective intensity. I own the retrieval that turns those
+observations into a <strong>precipitation ice water path (PIWP)</strong> product, end to
+end: algorithm, validation, production code, documentation and delivery.</p>
+<h2>Approach</h2>
+<figure><img alt="Conceptual k-d tree fixed-radius search" src="kdtree.png" width="1084" height="1100" loading="lazy"><figcaption>Conceptual k-d tree fixed-radius search</figcaption></figure>
+<ul>
+<li><strong>Instance-based, not extrapolating.</strong> A k-d tree searches a database of
+  collocated TROPICS observations and GPM Dual-frequency Precipitation Radar
+  estimates. Each new observation is answered by its neighbours within a fixed
+  radius in feature space, so the retrieval stays inside what it has seen
+  rather than extrapolating the way a neural network can.</li>
+<li><strong>Physics-informed features.</strong> Inputs are brightness-temperature
+  depressions relative to clear-sky radiative-transfer simulations, which
+  separate the ice-scattering signal from surface and atmospheric variability.
+  The database is stratified by relative airmass to handle the cross-track
+  viewing geometry.</li>
+<li><strong>Uncertainty from the neighbourhood.</strong> The spread of neighbouring reference
+  values gives every pixel its own, heteroscedastic uncertainty, documented
+  for users as algorithm spread rather than total error.</li>
+</ul>
+<h2>Validation against independent radar data</h2>
+<figure><img alt="Error, bias and uncertainty across the scan, November 2021" src="scan_validation.jpg" width="1498" height="899" loading="lazy"><figcaption>Error, bias and uncertainty across the scan, November 2021</figcaption></figure>
+<p>On independent November 2021 data (178,423 profiles), pixel-level mean
+absolute error is about 59 g m⁻², and both error and uncertainty stay stable
+across the full scan swath. Monthly global means for September 2021 match the
+radar's zonal structure with r = 0.87.</p>
+<figure><img alt="Global monthly mean ice water path, TROPICS vs GPM radar" src="global_validation.jpg" width="1544" height="922" loading="lazy"><figcaption>Global monthly mean ice water path, TROPICS vs GPM radar</figcaption></figure>
+<h2>Shipping it</h2>
+<p>The retrieval package was delivered to NASA for operational processing in
+2025, and the product is distributed through NASA's GES DISC. Later versions
+added a quality-control flag and geolocation fields requested by users. Along
+the way I found brightness-temperature calibration drift in the upstream
+Level-1 data, built bias corrections from clear-sky simulations, and
+confirmed them with the mission calibration team.</p>
+<p><em>Methods and figures are from my IGARSS 2026 paper with R. Bennartz, R. V.
+Leslie and W. J. Blackwell (Vanderbilt and MIT Lincoln Laboratory). Supported
+by NASA and MIT Lincoln Laboratory.</em></p></article>
+<nav class="page-nav" aria-label="More projects"><a href="/projects/landsat-cross-calibration/"><span>Previous</span>Landsat 8/9 cross-calibration with an uncertainty budget</a><a href="/projects/deep-learning-precip-type/" style="text-align:right"><span>Next</span>Deep learning for precipitation type from microwave sounders</a></nav>
+</div>
+</main>
+<footer class="site-footer"><div class="wrap">
+<span>© 2026 Ruiyao Chen</span>
+<span><a href="mailto:chenruiyao@gmail.com">chenruiyao@gmail.com</a> · <a href="/feed.xml">RSS</a></span>
+</div></footer>
+</body>
+</html>

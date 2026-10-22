@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume · Ruiyao Chen</title>
+<meta name="description" content="Resume of Ruiyao Chen: Data Scientist · Earth Observation, Machine Learning &amp; Uncertainty.">
+<meta name="author" content="Ruiyao Chen">
+<link rel="canonical" href="https://ruiyao-chen.github.io/resume/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Resume · Ruiyao Chen">
+<meta property="og:description" content="Resume of Ruiyao Chen: Data Scientist · Earth Observation, Machine Learning &amp; Uncertainty.">
+<meta property="og:url" content="https://ruiyao-chen.github.io/resume/"><meta property="og:image" content="https://ruiyao-chen.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d6b61">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Ruiyao Chen: writing" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header"><div class="wrap">
+<a class="brand" href="/"><span class="brand-mark">RC</span><span class="brand-name">Ruiyao Chen</span></a>
+<nav class="nav" aria-label="Main"><a href="/projects/">Projects</a><a href="/blog/">Writing</a><a href="/resume/" aria-current="page">Resume</a><a href="/#contact">Contact</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap"><div class="page-head" style="padding-bottom:8px">
+<h1 style="margin-bottom:6px">Ruiyao Chen</h1>
+<p style="font-size:1.1rem;margin:0">Data Scientist · Earth Observation, Machine Learning &amp; Uncertainty</p>
+<div class="contact-line"><span>Princeton, NJ (Eastern Time)</span><span><a href="mailto:chenruiyao@gmail.com">chenruiyao@gmail.com</a></span><span><a href="https://www.linkedin.com/in/ruiyao-chen">www.linkedin.com/in/ruiyao-chen</a></span><span><a href="https://ruiyao-chen.github.io">ruiyao-chen.github.io</a></span><span>U.S. permanent resident</span></div>
+<div class="actions no-print" style="margin-bottom:8px"><a class="btn primary" href="/resume/Ruiyao_Chen_Resume.pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Download PDF</a></div>
+</div>
+<div class="resume">
+<h2>Summary</h2><p>Ph.D. remote-sensing data scientist with 10+ years turning satellite and environmental data into validated products for NASA missions (TROPICS, GPM, TRMM, PolSIR). I specialize in the part most models skip: defining what &quot;accurate&quot; means for a product, designing the validation that proves it, and quantifying uncertainty for every prediction. I combine radiative-transfer physics with machine learning in Python, and I have taken models from research prototype to production code running in NASA&#x27;s operational processing.</p>
+<h2>Skills</h2><dl class="skills"><dt>Machine learning &amp; statistics</dt><dd>XGBoost, random forests, PyTorch (CNN, MLP), conformal prediction, quantile regression, k-d tree / instance-based retrieval, Monte Carlo UQ, spatial cross-validation, feature engineering</dd><dt>Python &amp; data</dt><dd>Python, NumPy, SciPy, pandas, xarray, GeoPandas, rasterio, scikit-learn, pytest, SQL, Git, Linux, HPC</dd><dt>Earth observation</dt><dd>Google Earth Engine, GEDI, Sentinel-2, Landsat 8/9, passive microwave, GOES-16/17, ERA5, GEOS-5, CRTM, RTTOV, ARTS</dd><dt>Also</dt><dd>Fortran, MATLAB, R, C/C++, technical writing, independent-review defense, mentoring</dd></dl>
+<h2>Experience</h2><div class="job"><div class="job-head"><h3>Research Scientist</h3><span class="dates">2023 – present</span></div>
+<p class="org">Vanderbilt University, Earth &amp; Environmental Sciences · Nashville, TN / Princeton, NJ</p>
+<ul><li>Own NASA TROPICS&#x27; operational precipitation ice-water-path retrieval end to end: proposed the algorithm, built and validated it, wrote the production code and documentation, delivered it to NASA for operational processing, and improved later versions from user feedback.</li><li>Found brightness-temperature calibration drift between time periods in TROPICS Level-1 data that was propagating into retrievals; built per-period bias corrections from clear-sky radiative-transfer simulations, confirmed with the mission calibration team.</li><li>Built per-pixel uncertainty estimates for the ice retrieval and documented what they capture versus total error, so users read confidence correctly.</li><li>Built pre-launch simulated observations for NASA PolSIR (CRTM radiative transfer from ERA5 with per-channel noise, matched to ERA5, GEOS-5 and GOES-16/17), giving algorithm teams a known-truth testbed years before launch.</li></ul></div><div class="job"><div class="job-head"><h3>Postdoctoral Researcher</h3><span class="dates">2018 – 2023</span></div>
+<p class="org">Vanderbilt University, Earth &amp; Environmental Sciences · Nashville, TN</p>
+<ul><li>Co-PI and technical lead on a NASA GPM grant characterizing uncertainty in the multi-satellite precipitation record; built Monte Carlo uncertainty-quantification frameworks for precipitation and cloud retrievals.</li><li>Developed deep-learning (CNN with attention, MLP) and random-forest models for hydrometeor classification and rain-rate estimation from passive microwave data, grounded in radiative-transfer physics.</li><li>Built Python, Fortran and SQL pipelines to aggregate, clean and validate multi-terabyte satellite datasets.</li></ul></div><div class="job"><div class="job-head"><h3>Research Scientist</h3><span class="dates">2018</span></div>
+<p class="org">Environmental Model and Data Optima · Laurel, MD</p>
+<ul><li>Designed gradient-boosted (XGBoost) models to cross-calibrate a network of satellite microwave sensors, reducing systematic bias by 11% across precipitation, weather and climate products.</li><li>Developed cloud, haze and low-cloud detection algorithms from multispectral and microwave observations.</li></ul></div><div class="job"><div class="job-head"><h3>Graduate Research Assistant</h3><span class="dates">2012 – 2018</span></div>
+<p class="org">Central Florida Remote Sensing Lab, University of Central Florida · Orlando, FL</p>
+<ul><li>Root-caused two hidden on-orbit anomalies in NASA&#x27;s 17-year TRMM Microwave Imager record and built physics-based corrections adopted in the TMI legacy (1B11 V8) reprocessing.</li><li>With the NASA GPM inter-calibration working group, designed a three-way cross-calibration of GMI, TMI and WindSat, producing a consistent multi-decadal record (TMI–WindSat stable to 0.1 K over 5+ years).</li></ul></div>
+<h2>Education</h2><div class="job"><div class="job-head"><h3>Ph.D., Electrical Engineering</h3><span class="dates">2018</span></div>
+<p class="org">University of Central Florida · Stochastic modeling, radiative transfer and microwave remote sensing. Dissertation: a consistent oceanic multi-decadal inter-calibrated TMI–GMI data record.</p></div><div class="job"><div class="job-head"><h3>M.S., Electrical Engineering</h3><span class="dates">2014</span></div>
+<p class="org">University of Central Florida</p></div><div class="job"><div class="job-head"><h3>B.Eng., Electronics &amp; Information Engineering (Honors)</h3><span class="dates">2012</span></div>
+<p class="org">Wuhan University of Science and Technology</p></div>
+<h2 id="publications">Publications</h2><ul class="pubs"><li><span class="year">2026</span><div>
+<div class="ptitle">TROPICS precipitation ice water path retrieval: a probabilistic k-d tree approach with uncertainty quantification</div>
+<div class="pmeta"><b>R. Chen</b>, R. Bennartz, R. V. Leslie, W. J. Blackwell. <i>IEEE IGARSS 2026 (journal version under review at IEEE Transactions on Geoscience and Remote Sensing)</i></div></div></li><li><span class="year">2023</span><div>
+<div class="ptitle"><a href="https://doi.org/10.3390/rs15102670" target="_blank" rel="noopener">A deep-learning scheme for hydrometeor type classification using passive microwave observations</a></div>
+<div class="pmeta"><b>R. Chen</b>, R. Bennartz. <i>Remote Sensing, 15(10), 2670</i></div></div></li><li><span class="year">2021</span><div>
+<div class="ptitle">Rainfall algorithms using oceanic satellite observations from MWHS-2</div>
+<div class="pmeta"><b>R. Chen</b>, R. Bennartz. <i>Advances in Atmospheric Sciences, 38(8), 1367–1378</i></div></div></li><li><span class="year">2020</span><div>
+<div class="ptitle"><a href="https://doi.org/10.1175/JAMC-D-19-0293.1" target="_blank" rel="noopener">Sensitivity of 89–190-GHz microwave observations to ice particle scattering</a></div>
+<div class="pmeta"><b>R. Chen</b>, R. Bennartz. <i>Journal of Applied Meteorology and Climatology, 59(7), 1195–1215</i></div></div></li><li><span class="year">2020</span><div>
+<div class="ptitle">Creating a consistent multi-decadal oceanic TRMM–GPM brightness temperature record with estimated calibration uncertainty</div>
+<div class="pmeta"><b>R. Chen</b>, W. L. Jones. <i>Climate, 8(2), 31</i></div></div></li><li><span class="year">2018</span><div>
+<div class="ptitle">Emissive reflector correction in the legacy version 1B11 V8 (GPM05) brightness temperature of the TRMM Microwave Imager</div>
+<div class="pmeta">F. Alquaied, <b>R. Chen</b>, W. L. Jones. <i>IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing</i></div></div></li><li><span class="year">2018</span><div>
+<div class="ptitle">Hot load temperature correction for TRMM Microwave Imager in the legacy brightness temperature</div>
+<div class="pmeta">F. Alquaied, <b>R. Chen</b>, W. L. Jones. <i>IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing</i></div></div></li><li><span class="year">2017</span><div>
+<div class="ptitle">Creating a multidecadal ocean microwave brightness dataset: three-way intersatellite radiometric calibration among GMI, TMI, and WindSat</div>
+<div class="pmeta"><b>R. Chen</b>, H. Ebrahimi, W. L. Jones. <i>IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing</i></div></div></li><li><span class="year">2017</span><div>
+<div class="ptitle">Calibration of millimeter wave sounder radiometers on polar orbiting satellites</div>
+<div class="pmeta">H. Ebrahimi, <b>R. Chen</b>, W. L. Jones. <i>IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing</i></div></div></li><li><span class="year">2017</span><div>
+<div class="ptitle">Assessing radiometric stability of the 17-plus-year TRMM Microwave Imager 1B11 Version-8 (GPM05) brightness temperature product</div>
+<div class="pmeta"><b>R. Chen</b>, F. Alquaied, W. L. Jones. <i>Climate, 5(4), 92</i></div></div></li><li><span class="year">2016</span><div>
+<div class="ptitle">Intercalibration of the GPM microwave radiometer constellation</div>
+<div class="pmeta">W. Berg, S. Bilanow, <b>R. Chen</b>, S. Datta, D. Draper, H. Ebrahimi, S. Farrar, et al. <i>Journal of Atmospheric and Oceanic Technology, 33(12), 2639–2654</i></div></div></li></ul>
+<h2>Grants & honors</h2><ul><li>Co-PI, Characterizing Uncertainty of Global Precipitation Measurement (GPM), NASA, 2019–2020</li><li>NASA Agency Group Achievement Award, 2015</li><li>Graduate Dean&#x27;s Dissertation Completion Fellowship, UCF, 2018</li><li>NSF L.E.A.R.N. Program Mentor Scholarship, 2015</li><li>Machine Learning certificate, Stanford University (online), 2018</li></ul>
+<h2>Service</h2><ul><li>Panelist, NASA ROSES proposal review</li><li>Reviewer for IEEE TGRS, JSTARS and GRSL, and for AMS and AGU journals</li></ul>
+</div></div>
+</main>
+<footer class="site-footer"><div class="wrap">
+<span>© 2026 Ruiyao Chen</span>
+<span><a href="mailto:chenruiyao@gmail.com">chenruiyao@gmail.com</a> · <a href="/feed.xml">RSS</a></span>
+</div></footer>
+</body>
+</html>

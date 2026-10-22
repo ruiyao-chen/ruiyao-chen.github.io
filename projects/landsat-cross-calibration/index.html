@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Landsat 8/9 cross-calibration with an uncertainty budget · Ruiyao Chen</title>
+<meta name="description" content="A Python pipeline that tests, band by band, whether Landsat 8 and 9 agree closely enough to be used as one data source, and only calls a difference real when it exceeds its own k=2 uncertainty.">
+<meta name="author" content="Ruiyao Chen">
+<link rel="canonical" href="https://ruiyao-chen.github.io/projects/landsat-cross-calibration/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Landsat 8/9 cross-calibration with an uncertainty budget · Ruiyao Chen">
+<meta property="og:description" content="A Python pipeline that tests, band by band, whether Landsat 8 and 9 agree closely enough to be used as one data source, and only calls a difference real when it exceeds its own k=2 uncertainty.">
+<meta property="og:url" content="https://ruiyao-chen.github.io/projects/landsat-cross-calibration/"><meta property="og:image" content="https://ruiyao-chen.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d6b61">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Ruiyao Chen: writing" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header"><div class="wrap">
+<a class="brand" href="/"><span class="brand-mark">RC</span><span class="brand-name">Ruiyao Chen</span></a>
+<nav class="nav" aria-label="Main"><a href="/projects/" aria-current="page">Projects</a><a href="/blog/">Writing</a><a href="/resume/">Resume</a><a href="/#contact">Contact</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap"><div class="page-head">
+<div class="crumbs"><a href="/projects/">Projects</a> /</div>
+<h1>Landsat 8/9 cross-calibration with an uncertainty budget</h1>
+<p class="lede">A Python pipeline that tests, band by band, whether Landsat 8 and 9 agree closely enough to be used as one data source, and only calls a difference real when it exceeds its own k=2 uncertainty.</p>
+<p class="callout">Recovers injected biases to within noise (+0.355% vs +0.353% injected) before touching real data</p>
+<div class="meta-row"><span class="period">2026 · independent project</span><ul class="tags"><li>Python</li><li>Google Earth Engine</li><li>uncertainty budget</li><li>image registration</li><li>RANSAC</li><li>pytest</li></ul></div>
+
+</div>
+<figure class="cover"><img src="reflective_bias.png" alt="Bar chart of per-band Landsat 9 minus Landsat 8 reflectance bias with k=2 error bars, from the synthetic test backend" width="1040" height="585"></figure>
+<article class="prose"><p>Landsat 8 and 9 fly the same orbit eight days apart, so over a stable desert
+calibration site they see nearly the same scene under nearly the same
+geometry: a clean natural experiment for comparing two sensors. This project
+reproduces, in miniature, the cross-calibration methodology I built for NASA's
+passive-microwave constellation, and applies it to optical and thermal imagery.</p>
+<h2>What it does</h2>
+<ol>
+<li><strong>Pairs scenes:</strong> finds near-coincident L8/L9 acquisitions over a
+   CEOS pseudo-invariant site (Libya-4 by default).</li>
+<li><strong>Radiometric comparison:</strong> per-band reflectance ratio for the OLI bands
+   and brightness-temperature difference for the thermal (TIRS) bands, after a
+   spectral band adjustment so the remaining difference is radiometric, not
+   spectral.</li>
+<li><strong>Uncertainty budget:</strong> statistical, spectral-adjustment, temporal/BRDF,
+   atmospheric and noise-floor terms combined in quadrature, reported at k=1
+   and k=2, with a significance flag per band.</li>
+<li><strong>Geometric registration:</strong> sub-pixel phase correlation for the global
+   offset, plus a tie-point network with a RANSAC affine fit that flags
+   cloud- and smoke-contaminated patches as outliers.</li>
+</ol>
+<figure><img alt="Uncertainty components per band (synthetic backend)" src="uncertainty_components.png" width="780" height="520" loading="lazy"><figcaption>Uncertainty components per band (synthetic backend)</figcaption></figure>
+<h2>Validation before real data</h2>
+<p>The science code is decoupled from the data source. A Google Earth Engine
+backend pulls real Landsat Collection-2 data; a <strong>synthetic backend injects a
+known bias and sub-pixel shift</strong>, and a pytest suite checks the pipeline
+recovers them:</p>
+<table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th>Injected</th>
+<th>Recovered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Red-band bias</td>
+<td>+0.353%</td>
+<td>+0.355%</td>
+</tr>
+<tr>
+<td>TIRS-1 bias</td>
+<td>−0.188 K</td>
+<td>−0.190 K</td>
+</tr>
+<tr>
+<td>Geometric shift (dy, dx)</td>
+<td>(+0.35, −0.20) px</td>
+<td>(+0.32, −0.18) px</td>
+</tr>
+</tbody>
+</table>
+<p>The figures on this page come from that synthetic backend; they show the
+method works, not what the real sensors do. Real-scene runs are in progress.</p>
+<figure><img alt="Tie-point field with RANSAC outliers (synthetic)" src="tiepoint_field.png" width="845" height="780" loading="lazy"><figcaption>Tie-point field with RANSAC outliers (synthetic)</figcaption></figure>
+<h2>Why it matters for ML work</h2>
+<p>Any model trained on one sensor and applied to another inherits their
+calibration difference as a silent distribution shift. This is the check
+that tells you whether two data sources can be pooled, with an explicit
+uncertainty rather than an assumption.</p></article>
+<nav class="page-nav" aria-label="More projects"><a href="/projects/canopy-height-validation/"><span>Previous</span>Canopy height for wildfire fuels, validated honestly</a><a href="/projects/tropics-ice-water-path/" style="text-align:right"><span>Next</span>An operational NASA retrieval with per-pixel uncertainty</a></nav>
+</div>
+</main>
+<footer class="site-footer"><div class="wrap">
+<span>© 2026 Ruiyao Chen</span>
+<span><a href="mailto:chenruiyao@gmail.com">chenruiyao@gmail.com</a> · <a href="/feed.xml">RSS</a></span>
+</div></footer>
+</body>
+</html>

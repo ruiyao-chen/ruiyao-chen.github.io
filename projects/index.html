@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects · Ruiyao Chen</title>
+<meta name="description" content="Selected data science and machine learning projects.">
+<meta name="author" content="Ruiyao Chen">
+<link rel="canonical" href="https://ruiyao-chen.github.io/projects/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Projects · Ruiyao Chen">
+<meta property="og:description" content="Selected data science and machine learning projects.">
+<meta property="og:url" content="https://ruiyao-chen.github.io/projects/"><meta property="og:image" content="https://ruiyao-chen.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d6b61">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Ruiyao Chen: writing" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header"><div class="wrap">
+<a class="brand" href="/"><span class="brand-mark">RC</span><span class="brand-name">Ruiyao Chen</span></a>
+<nav class="nav" aria-label="Main"><a href="/projects/" aria-current="page">Projects</a><a href="/blog/">Writing</a><a href="/resume/">Resume</a><a href="/#contact">Contact</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap"><div class="page-head">
+<h1>Projects</h1>
+<p class="lede">Machine learning, validation and uncertainty work on satellite data, from independent projects to production systems for NASA missions.</p>
+</div>
+<div class="cards"><article class="card"><div class="card-media"><img src="/projects/canopy-height-validation/study_design.png" alt="Map of GEDI shots in two California ecoregions, split into 13 km spatial blocks, with one test fold and a 1 km buffer highlighted" width="1352" height="650" loading="lazy"></div>
+<div class="card-body">
+<span class="period">2026 · independent project</span>
+<h3><a href="/projects/canopy-height-validation/">Canopy height for wildfire fuels, validated honestly</a></h3>
+<p>A validation-first ML model of canopy height in fire-prone California, from GEDI spaceborne LiDAR, Sentinel-2 and terrain. Most of the code is about how the model is evaluated, not the model itself.</p>
+<p class="result">Spatial CV, cross-region transfer and conformal intervals on 16,000 real GEDI shots</p>
+<ul class="tags"><li>XGBoost</li><li>conformal prediction</li><li>spatial CV</li><li>Google Earth Engine</li><li>GEDI</li></ul>
+</div></article><article class="card"><div class="card-media"><img src="/projects/landsat-cross-calibration/reflective_bias.png" alt="Bar chart of per-band Landsat 9 minus Landsat 8 reflectance bias with k=2 error bars, from the synthetic test backend" width="1040" height="585" loading="lazy"></div>
+<div class="card-body">
+<span class="period">2026 · independent project</span>
+<h3><a href="/projects/landsat-cross-calibration/">Landsat 8/9 cross-calibration with an uncertainty budget</a></h3>
+<p>A Python pipeline that tests, band by band, whether Landsat 8 and 9 agree closely enough to be used as one data source, and only calls a difference real when it exceeds its own k=2 uncertainty.</p>
+<p class="result">Recovers injected biases to within noise (+0.355% vs +0.353% injected) before touching real data</p>
+<ul class="tags"><li>Python</li><li>Google Earth Engine</li><li>uncertainty budget</li><li>image registration</li><li>RANSAC</li></ul>
+</div></article><article class="card"><div class="card-media"><img src="/projects/tropics-ice-water-path/mindulle.jpg" alt="Six-panel map of TROPICS retrievals over Typhoon Mindulle on 26 September 2021, including ice water path, rain rate and number of neighbors" width="1664" height="861" loading="lazy"></div>
+<div class="card-body">
+<span class="period">2023 – present · NASA TROPICS mission</span>
+<h3><a href="/projects/tropics-ice-water-path/">An operational NASA retrieval with per-pixel uncertainty</a></h3>
+<p>I proposed, built, validated and shipped the precipitation ice-water-path product for NASA&#x27;s TROPICS small-satellite constellation: a probabilistic k-d tree retrieval that reports an uncertainty for every pixel.</p>
+<p class="result">Delivered to NASA operations; zonal r = 0.87 against independent GPM radar</p>
+<ul class="tags"><li>k-d tree</li><li>probabilistic retrieval</li><li>uncertainty quantification</li><li>production code</li><li>radiative transfer</li></ul>
+</div></article></div>
+<div class="more-list" style="margin-bottom:56px"><article class="more-item">
+<h3><a href="/projects/deep-learning-precip-type/">Deep learning for precipitation type from microwave sounders</a></h3>
+<span class="period">2019 – 2023 · Vanderbilt</span>
+<p>CNN, MLP and random-forest models that classify hydrometeor type (liquid, mixed, ice) and estimate rain rate from 89–190 GHz satellite observations, trained on GPM radar labels and grounded in radiative-transfer physics.</p>
+</article><article class="more-item">
+<h3><a href="/projects/trmm-gpm-intercalibration/">A consistent 20-year satellite record, by finding hidden sensor errors</a></h3>
+<span class="period">2012 – 2018 · Ph.D., University of Central Florida</span>
+<p>Root-caused two hidden on-orbit anomalies in NASA&#x27;s 17-year TRMM Microwave Imager record and designed a three-way cross-calibration that ties TRMM and GPM into one consistent multi-decadal data record.</p>
+</article></div>
+</div>
+</main>
+<footer class="site-footer"><div class="wrap">
+<span>© 2026 Ruiyao Chen</span>
+<span><a href="mailto:chenruiyao@gmail.com">chenruiyao@gmail.com</a> · <a href="/feed.xml">RSS</a></span>
+</div></footer>
+</body>
+</html>

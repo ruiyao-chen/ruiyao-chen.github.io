@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canopy height for wildfire fuels, validated honestly · Ruiyao Chen</title>
+<meta name="description" content="A validation-first ML model of canopy height in fire-prone California, from GEDI spaceborne LiDAR, Sentinel-2 and terrain. Most of the code is about how the model is evaluated, not the model itself.">
+<meta name="author" content="Ruiyao Chen">
+<link rel="canonical" href="https://ruiyao-chen.github.io/projects/canopy-height-validation/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Canopy height for wildfire fuels, validated honestly · Ruiyao Chen">
+<meta property="og:description" content="A validation-first ML model of canopy height in fire-prone California, from GEDI spaceborne LiDAR, Sentinel-2 and terrain. Most of the code is about how the model is evaluated, not the model itself.">
+<meta property="og:url" content="https://ruiyao-chen.github.io/projects/canopy-height-validation/"><meta property="og:image" content="https://ruiyao-chen.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d6b61">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Ruiyao Chen: writing" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header"><div class="wrap">
+<a class="brand" href="/"><span class="brand-mark">RC</span><span class="brand-name">Ruiyao Chen</span></a>
+<nav class="nav" aria-label="Main"><a href="/projects/" aria-current="page">Projects</a><a href="/blog/">Writing</a><a href="/resume/">Resume</a><a href="/#contact">Contact</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap"><div class="page-head">
+<div class="crumbs"><a href="/projects/">Projects</a> /</div>
+<h1>Canopy height for wildfire fuels, validated honestly</h1>
+<p class="lede">A validation-first ML model of canopy height in fire-prone California, from GEDI spaceborne LiDAR, Sentinel-2 and terrain. Most of the code is about how the model is evaluated, not the model itself.</p>
+<p class="callout">Spatial CV, cross-region transfer and conformal intervals on 16,000 real GEDI shots</p>
+<div class="meta-row"><span class="period">2026 · independent project</span><ul class="tags"><li>XGBoost</li><li>conformal prediction</li><li>spatial CV</li><li>Google Earth Engine</li><li>GEDI</li><li>Sentinel-2</li><li>pytest</li></ul></div>
+
+</div>
+<figure class="cover"><img src="study_design.png" alt="Map of GEDI shots in two California ecoregions, split into 13 km spatial blocks, with one test fold and a 1 km buffer highlighted" width="1352" height="650"></figure>
+<article class="prose"><p>Canopy height is one of the structural layers fire-behaviour models need for
+crown fire. GEDI measures it directly, but only along sparse 25 m tracks, so a
+wall-to-wall map has to learn height from imagery and terrain. Everything then
+depends on how honestly that model is evaluated. This project asks the
+question a fuels product has to answer before anyone uses its maps:
+<strong>how wrong is it, where, and does its stated uncertainty hold somewhere new?</strong></p>
+<h2>Setup</h2>
+<ul>
+<li><strong>Reference:</strong> 16,000 quality-screened GEDI L2A shots (RH98), 2019–2023, in
+  two contrasting ecoregions: Sierra Nevada mixed conifer and Central Coast
+  chaparral/oak. Shots in recently burned areas are dropped.</li>
+<li><strong>Features:</strong> Sentinel-2 summer median composites (9 bands plus NDVI, EVI,
+  red-edge NDVI, NBR, NDMI) with Cloud Score+ masking, and SRTM terrain.
+  Coordinates are deliberately left out: the goal is a model that transfers,
+  not one that interpolates between tracks.</li>
+<li><strong>Models:</strong> XGBoost, random forest and ridge, with fixed hyperparameters
+  (not tuned inside the evaluation folds).</li>
+<li><strong>Evaluation:</strong> random k-fold, spatial-block k-fold (block size set by a
+  variogram), spatial blocks with a 1 km buffer, and train-on-one-ecoregion /
+  test-on-the-other. Errors broken down by height class and LANDFIRE
+  vegetation type.</li>
+<li><strong>Uncertainty:</strong> quantile XGBoost calibrated with conformalized quantile
+  regression (CQR) and Mondrian CQR, checked over 10 repeated spatial splits.</li>
+<li><strong>Built test-first:</strong> a synthetic test bed with known true heights, plus 42
+  offline pytest tests, verified the machinery before any real data was used.</li>
+</ul>
+<figure><img alt="RMSE by evaluation scheme on real data" src="rmse_by_scheme.png" width="1456" height="507" loading="lazy"><figcaption>RMSE by evaluation scheme on real data</figcaption></figure>
+<h2>What I found</h2>
+<p><strong>Transfer is the dominant error.</strong> Within a region, random k-fold was only
+2–3% optimistic versus spatial CV. But a model trained in the other ecoregion
+was 34–45% worse, with biases of 6–9 m.</p>
+<p><strong>Absolute elevation is what fails to transfer.</strong> The two regions barely overlap
+in elevation, so trees trained in one carry its height level into the other.
+Dropping elevation cut transfer RMSE by 20% (Sierra) and 9% (coast) at about
+1% in-region cost. In-region CV alone would have kept the feature.</p>
+<p><strong>The fancy model was not the best one.</strong> Random forest beat XGBoost in every
+column, and ridge beat XGBoost on the coast. Within regions all three were
+within 4% of each other.</p>
+<figure><img alt="Error by height class" src="height_class_error.png" width="1456" height="780" loading="lazy"><figcaption>Error by height class</figcaption></figure>
+<p><strong>The errors sit where fuels matter.</strong> Tall coastal forest (≥ 30 m) is
+under-predicted by 22 m, and short vegetation inside the Sierra forest matrix
+(gaps, shrubs, young stands) is over-predicted by 8–9 m: exactly the ladder-fuel
+strata. GEDI also cannot see below about 2 m, so grass and low shrub cannot be
+validated with it at all.</p>
+<p><strong>Calibration restores honesty, not accuracy.</strong> Within regions, CQR gives
+0.902 coverage for a nominal 90% interval, and Mondrian CQR fixes the
+per-region and per-height-class imbalance. In a new ecoregion, the same
+interval covers only 56%. Recalibrating on 20% of the target region's blocks
+restores coverage, but by widening intervals up to 2.4×.</p>
+<figure><img alt="Interval coverage under transfer" src="coverage_transfer.png" width="793" height="546" loading="lazy"><figcaption>Interval coverage under transfer</figcaption></figure>
+<h2>What I'd tell a team shipping this map</h2>
+<ol>
+<li>Report spatial-CV and cross-region numbers, never random k-fold alone.</li>
+<li>Replace absolute elevation with relative terrain measures for any model
+   that must generalize.</li>
+<li>Shrub fuels need an independent reference (airborne LiDAR or field plots);
+   GEDI alone cannot validate them.</li>
+<li>Where intervals break under transfer, the fix is local training data, and
+   where to put it is a ground-truth design question.</li>
+</ol>
+<p>I also checked the results against an earlier, independent real subsample
+(15,549 shots, only 1,550 shared): within-region metrics and coverage were
+stable; transfer RMSE moved by up to 1.6 m, so I read transfer numbers as ±1–2 m.</p></article>
+<nav class="page-nav" aria-label="More projects"><span></span><a href="/projects/landsat-cross-calibration/" style="text-align:right"><span>Next</span>Landsat 8/9 cross-calibration with an uncertainty budget</a></nav>
+</div>
+</main>
+<footer class="site-footer"><div class="wrap">
+<span>© 2026 Ruiyao Chen</span>
+<span><a href="mailto:chenruiyao@gmail.com">chenruiyao@gmail.com</a> · <a href="/feed.xml">RSS</a></span>
+</div></footer>
+</body>
+</html>

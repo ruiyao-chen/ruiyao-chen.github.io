@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel><title>Ruiyao Chen: writing</title><link>https://ruiyao-chen.github.io/blog/</link>
+<description>Notes on model validation, uncertainty and Earth-observation data science.</description><item><title>Random k-fold flattered my model by 3%. A new region cost 45%.</title><link>https://ruiyao-chen.github.io/blog/validation-first-canopy-height/</link>
+<guid>https://ruiyao-chen.github.io/blog/validation-first-canopy-height/</guid><pubDate>Thu, 22 Oct 2026 12:00:00 +0000</pubDate>
+<description>What a validation-first canopy-height model taught me about where ML error actually comes from in Earth observation, and why calibrated intervals are not the same as accurate ones.</description></item><item><title>Test your pipeline against injected truth before you touch real data</title><link>https://ruiyao-chen.github.io/blog/test-against-injected-truth/</link>
+<guid>https://ruiyao-chen.github.io/blog/test-against-injected-truth/</guid><pubDate>Wed, 21 Oct 2026 12:00:00 +0000</pubDate>
+<description>Why I build a synthetic backend with known answers before running any real data, and an honest scorecard of what my synthetic test bed got right and wrong.</description></item></channel></rss>

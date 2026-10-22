@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A consistent 20-year satellite record, by finding hidden sensor errors · Ruiyao Chen</title>
+<meta name="description" content="Root-caused two hidden on-orbit anomalies in NASA&#x27;s 17-year TRMM Microwave Imager record and designed a three-way cross-calibration that ties TRMM and GPM into one consistent multi-decadal data record.">
+<meta name="author" content="Ruiyao Chen">
+<link rel="canonical" href="https://ruiyao-chen.github.io/projects/trmm-gpm-intercalibration/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A consistent 20-year satellite record, by finding hidden sensor errors · Ruiyao Chen">
+<meta property="og:description" content="Root-caused two hidden on-orbit anomalies in NASA&#x27;s 17-year TRMM Microwave Imager record and designed a three-way cross-calibration that ties TRMM and GPM into one consistent multi-decadal data record.">
+<meta property="og:url" content="https://ruiyao-chen.github.io/projects/trmm-gpm-intercalibration/"><meta property="og:image" content="https://ruiyao-chen.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d6b61">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Ruiyao Chen: writing" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header"><div class="wrap">
+<a class="brand" href="/"><span class="brand-mark">RC</span><span class="brand-name">Ruiyao Chen</span></a>
+<nav class="nav" aria-label="Main"><a href="/projects/" aria-current="page">Projects</a><a href="/blog/">Writing</a><a href="/resume/">Resume</a><a href="/#contact">Contact</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap"><div class="page-head">
+<div class="crumbs"><a href="/projects/">Projects</a> /</div>
+<h1>A consistent 20-year satellite record, by finding hidden sensor errors</h1>
+<p class="lede">Root-caused two hidden on-orbit anomalies in NASA&#x27;s 17-year TRMM Microwave Imager record and designed a three-way cross-calibration that ties TRMM and GPM into one consistent multi-decadal data record.</p>
+<p class="callout">Corrections adopted in NASA&#x27;s TMI legacy reprocessing; TMI–WindSat stable to 0.1 K over 5+ years</p>
+<div class="meta-row"><span class="period">2012 – 2018 · Ph.D., University of Central Florida</span><ul class="tags"><li>sensor calibration</li><li>uncertainty modeling</li><li>radiative transfer</li><li>data-record consistency</li><li>MATLAB</li></ul></div>
+
+</div>
+
+<article class="prose"><p>Climate-scale datasets are stitched together from many satellites. If the
+sensors disagree, the "trend" in the record is partly an artifact. My Ph.D.
+work made NASA's precipitation microwave record consistent across two decades.</p>
+<ul>
+<li><strong>Found two hidden anomalies</strong> in the TRMM Microwave Imager: solar heating
+  of the hot-load calibration target and an emissive main reflector. I built
+  physics-based correction models fit to flight data, which were adopted in
+  the TMI legacy (1B11 V8) reprocessing (IEEE JSTARS, 2018).</li>
+<li><strong>Three-way cross-calibration</strong> of GMI, TMI and WindSat with the NASA GPM
+  inter-calibration working group, using radiative-transfer simulations as
+  the common reference. TMI and WindSat stayed consistent to 0.1 K over more
+  than five years (IEEE JSTARS, 2017; JTECH, 2016).</li>
+<li><strong>A generic uncertainty model</strong> for sensor inter-calibration, used to put
+  an error bar on the merged TRMM–GPM record (Climate, 2020).</li>
+</ul>
+<p>The work contributed to a NASA Agency Group Achievement Award (2015), and the
+same pattern of comparing sensors against a shared reference with an explicit
+uncertainty budget runs through my later projects.</p></article>
+<nav class="page-nav" aria-label="More projects"><a href="/projects/deep-learning-precip-type/"><span>Previous</span>Deep learning for precipitation type from microwave sounders</a></nav>
+</div>
+</main>
+<footer class="site-footer"><div class="wrap">
+<span>© 2026 Ruiyao Chen</span>
+<span><a href="mailto:chenruiyao@gmail.com">chenruiyao@gmail.com</a> · <a href="/feed.xml">RSS</a></span>
+</div></footer>
+</body>
+</html>

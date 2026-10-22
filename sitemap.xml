@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://ruiyao-chen.github.io/</loc></url>
+  <url><loc>https://ruiyao-chen.github.io/projects/</loc></url>
+  <url><loc>https://ruiyao-chen.github.io/blog/</loc></url>
+  <url><loc>https://ruiyao-chen.github.io/resume/</loc></url>
+  <url><loc>https://ruiyao-chen.github.io/projects/canopy-height-validation/</loc></url>
+  <url><loc>https://ruiyao-chen.github.io/projects/landsat-cross-calibration/</loc></url>
+  <url><loc>https://ruiyao-chen.github.io/projects/tropics-ice-water-path/</loc></url>
+  <url><loc>https://ruiyao-chen.github.io/projects/deep-learning-precip-type/</loc></url>
+  <url><loc>https://ruiyao-chen.github.io/projects/trmm-gpm-intercalibration/</loc></url>
+  <url><loc>https://ruiyao-chen.github.io/blog/validation-first-canopy-height/</loc></url>
+  <url><loc>https://ruiyao-chen.github.io/blog/test-against-injected-truth/</loc></url>
+</urlset>

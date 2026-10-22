@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep learning for precipitation type from microwave sounders · Ruiyao Chen</title>
+<meta name="description" content="CNN, MLP and random-forest models that classify hydrometeor type (liquid, mixed, ice) and estimate rain rate from 89–190 GHz satellite observations, trained on GPM radar labels and grounded in radiative-transfer physics.">
+<meta name="author" content="Ruiyao Chen">
+<link rel="canonical" href="https://ruiyao-chen.github.io/projects/deep-learning-precip-type/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep learning for precipitation type from microwave sounders · Ruiyao Chen">
+<meta property="og:description" content="CNN, MLP and random-forest models that classify hydrometeor type (liquid, mixed, ice) and estimate rain rate from 89–190 GHz satellite observations, trained on GPM radar labels and grounded in radiative-transfer physics.">
+<meta property="og:url" content="https://ruiyao-chen.github.io/projects/deep-learning-precip-type/"><meta property="og:image" content="https://ruiyao-chen.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d6b61">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Ruiyao Chen: writing" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header"><div class="wrap">
+<a class="brand" href="/"><span class="brand-mark">RC</span><span class="brand-name">Ruiyao Chen</span></a>
+<nav class="nav" aria-label="Main"><a href="/projects/" aria-current="page">Projects</a><a href="/blog/">Writing</a><a href="/resume/">Resume</a><a href="/#contact">Contact</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap"><div class="page-head">
+<div class="crumbs"><a href="/projects/">Projects</a> /</div>
+<h1>Deep learning for precipitation type from microwave sounders</h1>
+<p class="lede">CNN, MLP and random-forest models that classify hydrometeor type (liquid, mixed, ice) and estimate rain rate from 89–190 GHz satellite observations, trained on GPM radar labels and grounded in radiative-transfer physics.</p>
+<p class="callout">84.7% classification accuracy on held-out data (Remote Sensing, 2023)</p>
+<div class="meta-row"><span class="period">2019 – 2023 · Vanderbilt</span><ul class="tags"><li>PyTorch</li><li>CNN with attention</li><li>random forest</li><li>classification</li><li>regression</li><li>passive microwave</li></ul></div>
+<div class="actions" style="margin-top:20px"><a class="btn" href="https://doi.org/10.3390/rs15102670" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Paper (Remote Sensing, 2023)</a></div>
+</div>
+
+<article class="prose"><p>Microwave humidity sounders such as FY-3C MWHS-2 see through clouds to
+precipitation ice and liquid, but turning their brightness temperatures into
+precipitation type and rate is a non-linear problem with weak physical
+constraints. I built a sequence of models for it:</p>
+<ul>
+<li><strong>Physics first.</strong> A radiative-transfer sensitivity study of 89–190 GHz
+  channels to ice-particle scattering (JAMC, 2020) defined which channels and
+  features carry the signal.</li>
+<li><strong>Rain rate.</strong> Rainfall algorithms for oceanic MWHS-2 observations
+  (Advances in Atmospheric Sciences, 2021), with machine-learning models that
+  outperformed non-linear regression baselines.</li>
+<li><strong>Precipitation type.</strong> A convolutional neural network with an attention
+  mechanism, trained on hydrometeor labels from the GPM Dual-frequency
+  Precipitation Radar (Remote Sensing, 2023). It reaches <strong>84.7% accuracy</strong> on
+  test data, and its global annual cycles of precipitation occurrence agree
+  with the radar's.</li>
+</ul>
+<p>This work became the foundation for the operational TROPICS retrieval, which
+deliberately trades the neural network for an instance-based method that
+cannot extrapolate beyond its training data.</p></article>
+<nav class="page-nav" aria-label="More projects"><a href="/projects/tropics-ice-water-path/"><span>Previous</span>An operational NASA retrieval with per-pixel uncertainty</a><a href="/projects/trmm-gpm-intercalibration/" style="text-align:right"><span>Next</span>A consistent 20-year satellite record, by finding hidden sensor errors</a></nav>
+</div>
+</main>
+<footer class="site-footer"><div class="wrap">
+<span>© 2026 Ruiyao Chen</span>
+<span><a href="mailto:chenruiyao@gmail.com">chenruiyao@gmail.com</a> · <a href="/feed.xml">RSS</a></span>
+</div></footer>
+</body>
+</html>

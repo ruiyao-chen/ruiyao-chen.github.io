@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test your pipeline against injected truth before you touch real data · Ruiyao Chen</title>
+<meta name="description" content="Why I build a synthetic backend with known answers before running any real data, and an honest scorecard of what my synthetic test bed got right and wrong.">
+<meta name="author" content="Ruiyao Chen">
+<link rel="canonical" href="https://ruiyao-chen.github.io/blog/test-against-injected-truth/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Test your pipeline against injected truth before you touch real data · Ruiyao Chen">
+<meta property="og:description" content="Why I build a synthetic backend with known answers before running any real data, and an honest scorecard of what my synthetic test bed got right and wrong.">
+<meta property="og:url" content="https://ruiyao-chen.github.io/blog/test-against-injected-truth/"><meta property="og:image" content="https://ruiyao-chen.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d6b61">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Ruiyao Chen: writing" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header"><div class="wrap">
+<a class="brand" href="/"><span class="brand-mark">RC</span><span class="brand-name">Ruiyao Chen</span></a>
+<nav class="nav" aria-label="Main"><a href="/projects/">Projects</a><a href="/blog/" aria-current="page">Writing</a><a href="/resume/">Resume</a><a href="/#contact">Contact</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap"><div class="page-head">
+<div class="crumbs"><a href="/blog/">Writing</a> /</div>
+<h1>Test your pipeline against injected truth before you touch real data</h1>
+<div class="meta-row"><span class="period"><time datetime="2026-10-21">Oct 21, 2026</time> · 2 min read</span><ul class="tags"><li>testing</li><li>synthetic data</li><li>uncertainty</li><li>pytest</li></ul></div>
+</div>
+<article class="prose"><p>Real Earth-observation data has no answer key. If a calibration pipeline
+reports that Landsat 9 reads 0.35% brighter than Landsat 8, is that the
+sensors, or a bug? If a canopy-height model's 90% intervals cover 90% of the
+data, is the conformal code right, or did a leak make it look right?</p>
+<p>My habit is to answer those questions before real data exists, by building a
+<strong>synthetic backend that shares the real backend's data contract but injects
+known truth</strong>.</p>
+<h2>How it works</h2>
+<p>In my <a href="/projects/landsat-cross-calibration/">Landsat 8/9 cross-calibration pipeline</a>,
+the science code doesn't know where its data comes from. One backend pulls
+real scenes from Google Earth Engine. The other generates scenes with a fixed,
+known inter-sensor bias and a known sub-pixel shift, plus realistic noise.</p>
+<p>A pytest suite then asserts the pipeline gets the answer back:</p>
+<table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th>Injected</th>
+<th>Recovered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Red-band bias</td>
+<td>+0.353%</td>
+<td>+0.355%</td>
+</tr>
+<tr>
+<td>Thermal band bias</td>
+<td>−0.188 K</td>
+<td>−0.190 K</td>
+</tr>
+<tr>
+<td>Geometric shift (dy, dx)</td>
+<td>(+0.35, −0.20) px</td>
+<td>(+0.32, −0.18) px</td>
+</tr>
+</tbody>
+</table>
+<p>If those tests pass, a surprising number on real data is a finding, not a bug.</p>
+<h2>The part people skip: score the test bed afterwards</h2>
+<p>For my <a href="/projects/canopy-height-validation/">canopy-height project</a> I ran the
+full analysis on a synthetic landscape before pulling real GEDI data, then
+compared. The scorecard was humbling:</p>
+<table>
+<thead>
+<tr>
+<th>Synthetic prediction</th>
+<th>Real data</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random CV 6–11% optimistic vs spatial</td>
+<td>2–3%</td>
+<td>Direction held, size didn't</td>
+</tr>
+<tr>
+<td>R² ≈ 0.8</td>
+<td>R² 0.32–0.40</td>
+<td>Far too optimistic</td>
+</tr>
+<tr>
+<td>Tree models beat ridge by 20–25%</td>
+<td>Within 3%</td>
+<td>Wrong</td>
+</tr>
+<tr>
+<td>Transfer is the dominant error</td>
+<td>34–45% worse</td>
+<td>Held</td>
+</tr>
+<tr>
+<td>Dropping elevation helps transfer</td>
+<td>9–20% better</td>
+<td>Held, more strongly</td>
+</tr>
+<tr>
+<td>Conformal intervals hit nominal within regions</td>
+<td>0.902</td>
+<td>Held</td>
+</tr>
+<tr>
+<td>Coverage breaks under transfer</td>
+<td>0.56–0.78</td>
+<td>Held, worse on real data</td>
+</tr>
+</tbody>
+</table>
+<p>The test bed was right about the <strong>machinery</strong>: folds, buffers, conformal
+calibration, and the failure modes. It was wrong about <strong>accuracy</strong>, because
+my simulator gave imagery far more height signal than reality does.</p>
+<p>That's the correct division of labour. A synthetic test bed tells you
+whether your code measures what you think it measures. Only real data tells
+you how good the model is. Mixing those up, in either direction, is how
+pipelines ship with silent bugs or with overconfident accuracy claims.</p>
+<h2>The checklist</h2>
+<ol>
+<li>Separate the data source from the science code behind one data contract.</li>
+<li>Build a synthetic backend that injects known values for every quantity you
+   estimate, including the uncertainty.</li>
+<li>Write tests that recover the injected truth within the stated noise.</li>
+<li>Label synthetic results as synthetic, everywhere they appear.</li>
+<li>After real data arrives, publish the comparison, including what the
+   simulator got wrong.</li>
+</ol></article>
+<nav class="page-nav" aria-label="Post"><a href="/blog/"><span>Back</span>All writing</a>
+<a href="mailto:chenruiyao@gmail.com" style="text-align:right"><span>Questions?</span>Email me</a></nav>
+</div>
+</main>
+<footer class="site-footer"><div class="wrap">
+<span>© 2026 Ruiyao Chen</span>
+<span><a href="mailto:chenruiyao@gmail.com">chenruiyao@gmail.com</a> · <a href="/feed.xml">RSS</a></span>
+</div></footer>
+</body>
+</html>
