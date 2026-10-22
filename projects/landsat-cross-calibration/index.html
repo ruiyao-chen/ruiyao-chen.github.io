@@ -35,7 +35,7 @@
 <p class="lede">A Python pipeline that tests, band by band, whether Landsat 8 and 9 agree closely enough to be used as one data source, and only calls a difference real when it exceeds its own k=2 uncertainty.</p>
 <p class="callout">Recovers injected biases to within noise (+0.355% vs +0.353% injected) before touching real data</p>
 <div class="meta-row"><span class="period">2026 · independent project</span><ul class="tags"><li>Python</li><li>Google Earth Engine</li><li>uncertainty budget</li><li>image registration</li><li>RANSAC</li><li>pytest</li></ul></div>
-
+<div class="actions" style="margin-top:20px"><a class="btn" href="https://github.com/ruiyao-chen/landsat89-xcal" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Code on GitHub</a></div>
 </div>
 <figure class="cover"><img src="reflective_bias.png" alt="Bar chart of per-band Landsat 9 minus Landsat 8 reflectance bias with k=2 error bars, from the synthetic test backend" width="1040" height="585"></figure>
 <article class="prose"><p>Landsat 8 and 9 fly the same orbit eight days apart, so over a stable desert
